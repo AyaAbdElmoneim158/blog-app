@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import '../../features/auth/presentation/pages/login_page.dart';
+import '../../features/auth/presentation/pages/sign_up_page.dart';
 import 'routes.dart';
 
 class AppRouter {
@@ -9,7 +11,10 @@ class AppRouter {
     switch (settings.name) {
       case AppRoutes.initRoute:
         return pageTransition(settings, const SplashPage());
-
+      case AppRoutes.login:
+        return pageTransition(settings, const LoginPage(), type: PageTransitionType.bottomToTop);
+      case AppRoutes.register:
+        return pageTransition(settings, const SignUpPage(), type: PageTransitionType.rightToLeft);
       case AppRoutes.noFoundRoute:
       default:
         return pageTransition(settings, const NotFoundPage());
