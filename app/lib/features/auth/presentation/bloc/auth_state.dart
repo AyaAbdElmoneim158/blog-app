@@ -12,8 +12,8 @@ class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 
 class AuthSuccess extends AuthState {
-  final String userId;
-  const AuthSuccess(this.userId);
+  final User user;
+  const AuthSuccess(this.user);
 }
 
 class AuthFailure extends AuthState {

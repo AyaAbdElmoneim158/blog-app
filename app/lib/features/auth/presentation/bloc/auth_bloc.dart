@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/entities/user.dart';
 import '../../domain/usecases/user_login.dart';
 import '../../domain/usecases/user_sign_up.dart';
 
@@ -31,7 +32,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
     res.fold(
       (failure) => emit(AuthFailure(failure.msg)),
-      (uid) => emit(AuthSuccess(uid)),
+      (user) => emit(AuthSuccess(user)),
     );
   }
 
