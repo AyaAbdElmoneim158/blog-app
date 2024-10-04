@@ -1,9 +1,10 @@
 import 'package:app/core/error/failures.dart';
 import 'package:fpdart/fpdart.dart';
 import '../../../../core/error/exceptions.dart';
-import '../../domain/entities/user.dart';
+import '../../../../core/common/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_data_source.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
@@ -14,15 +15,10 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) async {
-    try {
-      final user = await authRemoteDataSource.loginWithEmailPassword(
-        email: email,
-        password: password,
-      );
-      return right(user);
-    } on ServerException catch (e) {
-      return left(Failure(e.msg));
-    }
+    return _getUser(() async => await authRemoteDataSource.loginWithEmailPassword(
+          email: email,
+          password: password,
+        ));
   }
 
   @override
@@ -31,12 +27,31 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) async {
+    return _getUser(() async => await authRemoteDataSource.signUpWithEmailPassword(
+          name: name,
+          email: email,
+          password: password,
+        ));
+  }
+
+  Future<Either<Failure, User>> _getUser(Future<User> Function() fn) async {
     try {
-      final user = await authRemoteDataSource.signUpWithEmailPassword(
-        name: name,
-        email: email,
-        password: password,
-      );
+      final user = await fn();
+      return right(user);
+    } on sb.AuthException catch (e) {
+      return left(Failure(e.message));
+    } on ServerException catch (e) {
+      return left(Failure(e.msg));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> currentUser() async {
+    try {
+      final user = await authRemoteDataSource.getCurrentUserData();
+      if (user == null) {
+        throw left(Failure('User not logged in!'));
+      }
       return right(user);
     } on ServerException catch (e) {
       return left(Failure(e.msg));

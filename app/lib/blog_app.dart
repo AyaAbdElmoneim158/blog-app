@@ -1,12 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'config/routing/router.dart';
 import 'config/routing/routes.dart';
+import 'core/common/cubits/app_user/app_user_cubit.dart';
 import 'core/helper/constants.dart';
 import 'config/theme/theme.dart';
+import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/auth/presentation/pages/login_page.dart';
 
-class BlogApp extends StatelessWidget {
+class BlogApp extends StatefulWidget {
   const BlogApp({super.key});
+
+  @override
+  State<BlogApp> createState() => _BlogAppState();
+}
+
+class _BlogAppState extends State<BlogApp> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AuthBloc>().add(AuthIsUserLoggedIn());
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,7 +34,17 @@ class BlogApp extends StatelessWidget {
       onUnknownRoute: (settings) => MaterialPageRoute(
         builder: (_) => const NotFoundPage(),
       ),
-      home: const BlogPage(),
+      home: BlocSelector<AppUserCubit, AppUserState, bool>(
+        selector: (state) {
+          return state is AppUserLoggedIn;
+        },
+        builder: (context, isLoggedIn) {
+          if (isLoggedIn) {
+            return const BlogPage();
+          }
+          return const LoginPage();
+        },
+      ),
     );
   }
 }
