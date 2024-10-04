@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/helper/constants.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
+import 'features/auth/domain/usecases/user_login.dart';
 import 'features/auth/domain/usecases/user_sign_up.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 
@@ -26,9 +27,13 @@ void _initAuth() {
   serviceLocator.registerFactory(() => AuthRepositoryImpl(serviceLocator()));
   //* Usecases - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   serviceLocator.registerFactory(() => UserSignUp(serviceLocator()));
+  serviceLocator.registerFactory(() => UserLogin(serviceLocator()));
 
   //* Bloc - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  serviceLocator.registerLazySingleton(() => AuthBloc(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => AuthBloc(
+        userLogin: serviceLocator(),
+        userSignUp: serviceLocator(),
+      ));
 }
 /*
 AuthBloc(
