@@ -39,10 +39,7 @@ class _BlogAppState extends State<BlogApp> {
           return state is AppUserLoggedIn;
         },
         builder: (context, isLoggedIn) {
-          if (isLoggedIn) {
-            return const BlogPage();
-          }
-          return const LoginPage();
+          return (isLoggedIn) ? const BlogPage() : const LoginPage();
         },
       ),
     );
