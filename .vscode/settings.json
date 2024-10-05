@@ -3,6 +3,7 @@
         "datasources",
         "fpdart",
         "MMMYYYY",
+        "Postgrest",
         "RGBO",
         "supabase"
     ]
