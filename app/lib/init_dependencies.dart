@@ -14,7 +14,7 @@ import 'features/auth/domain/usecases/user_login.dart';
 import 'features/auth/domain/usecases/user_sign_up.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/blog/data/datasources/blog_local_data_source.dart';
-import 'features/blog/data/datasources/blog_remote_data_sources.dart';
+import 'features/blog/data/datasources/blog_remote_data_source.dart';
 import 'features/blog/data/repositories/blog_repo_impl.dart';
 import 'features/blog/domain/usecases/get_all_blogs.dart';
 import 'features/blog/domain/usecases/upload_blog.dart';
